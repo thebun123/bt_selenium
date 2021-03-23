@@ -16,6 +16,19 @@ EMAIL = 'thebun1234@gmail.com'
 PASSWD = 'Lite2021'
 API_VERSION = '2020-10'
 
+def url_process(func):
+    def wrapper(*args, **kwargs):
+        requires = ['url']
+        for require in requires:
+            if require not in kwargs:
+                return False
+        u = urlparse(kwargs['url'])
+        kwargs['url'] = os.path.join(f'{u.scheme}://', u.netloc, 'admin')
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
 @url_process
 def get_cookies(*args, **kwargs):
     """Get cookies from Shopify shopping site"""
